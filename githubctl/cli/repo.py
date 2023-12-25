@@ -10,8 +10,9 @@ from githubctl.constants import PrintFormatOptions
 repo_app = typer.Typer()
 
 
-@repo_app.command("list", help="List all repositories")
+@repo_app.command("list")
 def list_repos(
+    user: str = typer.Option(..., "--user", "-u", help="github user name"),
     query: str = typer.Option(
         None,
         "--query",
@@ -27,7 +28,23 @@ def list_repos(
         None, help="Comma-separated list of resource field key names to sort by"
     ),
 ):
-    repo = get_repos(username="xiaopeng163123")
+    """List all repositories
+    
+    EXAMPLES
+
+    - To list all repositories for a user, print as table:
+
+    githubctl repo list -u xiaopeng163 --output=table
+
+    - list all repositories with language is Python and not forked:
+
+    githubctl repo list -u xiaopeng163 --query="[?(language=='Python' && fork=='False')]" --output=table
+
+    - list all repositories with language is Python and not forked, sort by stars by descending:
+    
+    githubctl repo list -u xiaopeng163 --query="[?(language=='Python' && fork=='False')]" --sort-by=!stars --output=table
+    """
+    repo = get_repos(username=user)
     if query:
         repo = filter_list_of_dicts(repo, query)
     if sort_by:

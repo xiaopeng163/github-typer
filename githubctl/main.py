@@ -1,8 +1,20 @@
 import sys
+import os
 
 import typer
+from dotenv import load_dotenv
 
 from githubctl.cli.repo import repo_app
+
+# first check if .env file exists in the current directory
+if os.path.isfile('.env'):
+    load_dotenv('.env')
+
+# then check if .env file exists in the user's home directory
+elif os.path.isfile(os.path.join(os.path.expanduser('~'), '.env')):
+    load_dotenv(os.path.join(os.path.expanduser('~'), '.env'))
+
+# if both not found, then will try to use the environment variables are set
 
 
 app = typer.Typer()
