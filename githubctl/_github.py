@@ -1,39 +1,56 @@
 import os
-
-from github import Github
-from rich import print, inspect
-
-# Authentication is defined via github.Auth
-from github import Auth
+import requests
 
 
-def get_repos(username=None):
-    # using an access token
-
-    if os.environ.get("GITHUB_TOKEN"):
-        auth = Auth.Token(os.environ.get("GITHUB_TOKEN"))
-    else:
-        auth = None
-
-    # First create a Github instance:
-    # Public Web Github
-    g = Github(auth=None)
-
+def get_all_user_repositories(username):
+    base_url = f"https://api.github.com/users/{username}/repos"
     repos = []
-    for repo in g.get_user(username).get_repos():
-        repos.append(
-            {
-                "name": repo.name,
-                "url": repo.html_url,
-                "description": repo.description,
-                "language": repo.language,
-                "stars": repo.stargazers_count,
-                "forks": repo.forks,
-                "fork": str(repo.fork),
-                "created_at": repo.created_at.strftime("%Y-%m-%d %H:%M:%S"),
-            }
-        )
-    # To close connections after use
-    g.close()
+    if os.environ.get("GITHUB_TOKEN"):
+        headers = {"Authorization": f"Bearer {os.environ.get('GITHUB_TOKEN')}"}
+    else:
+        headers = None
+    try:
+        page = 1
+        while True:
+            params = {"page": page, "per_page": 100}  # Adjust per_page as needed
+            response = requests.get(base_url, params=params, headers=headers)
+            response.raise_for_status()
 
-    return repos
+            repositories = response.json()
+            if not repositories:
+                break  # No more repositories
+
+            for repo in repositories:
+                print(repo)
+                repo_info = {
+                    "name": repo["name"],
+                    "url": repo["html_url"],
+                    "description": repo["description"],
+                    "language": repo["language"],
+                    "stars": repo["stargazers_count"],
+                    "forks": repo["forks_count"],
+                    "fork": repo["fork"],
+                    "created_at": repo["created_at"],
+                }
+                repos.append(repo_info)
+
+            page += 1
+
+        return repos
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching repositories for user {username}: {e}")
+        return None
+
+# Example usage:
+username = "xiaopeng163"
+
+repositories = get_all_user_repositories(username)
+
+if repositories:
+    print(f"Repositories for user {username}:")
+    i = 0
+    for repo in repositories:
+        print(repo)
+        i += 1
+
+print(i)

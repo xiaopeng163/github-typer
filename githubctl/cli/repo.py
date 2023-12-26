@@ -1,7 +1,7 @@
 import typer
 from typing import Optional
 
-from githubctl._github import get_repos
+from githubctl._github import get_all_user_repositories
 from githubctl.utils import print_beauty
 from githubctl.utils import filter_list_of_dicts
 from githubctl.utils import sort_list_of_dicts
@@ -42,9 +42,9 @@ def list_repos(
 
     - list all repositories with language is Python and not forked, sort by stars by descending:
     
-    githubctl repo list -u xiaopeng163 --query="[?(language=='Python' && fork=='False')]" --sort-by=!stars --output=table
+    githubctl repo list -u xiaopeng163 --query="[?(language=='Python' && fork=='False')]" --sort-by=~stars --output=table
     """
-    repo = get_repos(username=user)
+    repo = get_all_user_repositories(username=user)
     if query:
         repo = filter_list_of_dicts(repo, query)
     if sort_by:

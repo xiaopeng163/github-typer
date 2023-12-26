@@ -29,6 +29,7 @@ def sort_list_of_dicts(list_of_dict, key: str) -> list:
     """
     Sort list of dict by key, key format: key1,key2,key3
     """
+    reverse = False
     if key.startswith("~"):
         reverse = True
         key = key[1:]
