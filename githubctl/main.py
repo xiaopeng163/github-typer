@@ -5,6 +5,7 @@ import typer
 from dotenv import load_dotenv
 
 from githubctl.cli.repo import repo_app
+from githubctl.cli.stars import stars_app
 
 # first check if .env file exists in the current directory
 if os.path.isfile('.env'):
@@ -18,7 +19,8 @@ elif os.path.isfile(os.path.join(os.path.expanduser('~'), '.env')):
 
 
 app = typer.Typer()
-app.add_typer(repo_app, name="repo")
+app.add_typer(repo_app, name="repo", help="Manage repositories")
+app.add_typer(stars_app, name="stars", help="Manage stars")
 
 
 if __name__ == "__main__":

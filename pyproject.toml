@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "githubctl"
-version = "0.1.4"
+version = "0.1.5"
 description = ""
 authors = ["Peng Xiao <xiaoquwl@gmail.com>"]
 readme = "README.md"

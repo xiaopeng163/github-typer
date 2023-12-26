@@ -40,17 +40,3 @@ def get_all_user_repositories(username):
     except requests.exceptions.RequestException as e:
         print(f"Error fetching repositories for user {username}: {e}")
         return None
-
-# Example usage:
-username = "xiaopeng163"
-
-repositories = get_all_user_repositories(username)
-
-if repositories:
-    print(f"Repositories for user {username}:")
-    i = 0
-    for repo in repositories:
-        print(repo)
-        i += 1
-
-print(i)
