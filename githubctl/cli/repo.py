@@ -50,3 +50,11 @@ def list_repos(
     if sort_by:
         repo = sort_list_of_dicts(repo, sort_by)
     print_beauty(repo, output=output)
+
+@repo_app.command("delete")
+def delete_repo(
+    user: str = typer.Option(..., "--user", "-u", help="github user name")
+):
+    """delete repository by id
+    """
+    pass

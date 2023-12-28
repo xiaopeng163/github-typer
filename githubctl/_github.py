@@ -21,15 +21,15 @@ def get_all_user_repositories(username):
                 break  # No more repositories
 
             for repo in repositories:
-                print(repo)
                 repo_info = {
+                    "id": repo["id"],
                     "name": repo["name"],
                     "url": repo["html_url"],
                     "description": repo["description"],
                     "language": repo["language"],
                     "stars": repo["stargazers_count"],
                     "forks": repo["forks_count"],
-                    "fork": repo["fork"],
+                    "fork": str(repo["fork"]),
                     "created_at": repo["created_at"],
                 }
                 repos.append(repo_info)
